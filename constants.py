@@ -1,19 +1,41 @@
 from enum import Enum, IntEnum, auto,  unique
 
+TYPE_ERROR_MESSAGE = 'A {} is not comparable to a {}'
+
+# TODO Split Suit and Enums out other files
+
 @unique
 class Suit(Enum):
-    """ Suit values are not orderable. """
+    """
+    Suit values support equality but not order comparisons.
+
+    A TypeError is raised if an equality operator is used with a
+    value of another type.
+    """
     SPADE = auto()
     CLUB = auto()
     HEART = auto()
     DIAMOND = auto()
 
+    def __eq__(self, other):
+        if self.__class__ == other.__class__:
+            print(self)
+            print(other)
+            return super().__eq__(other)
+        else:
+            raise TypeError(TYPE_ERROR_MESSAGE.format(
+                self.__class__,
+                other.__class__))
+
 @unique
 class Rank(IntEnum):
     """
-    Rank values are comparable. Even though it should not matter if
-    used correctly (i.e. only compared to other Ranks), the value of each
-    Rank is set to its semantic value.
+    Rank values are comparable. Even though it should not matter,
+    each Rank is assigned to its semantic value (i.e. TWO maps to 2 not 0).
+
+    Raises TypeError if compared to a different type. This is to prevent
+    abuses of the enum (even though Rank.TWO == 2 would be correct withou
+    this, it defeats the purpose of using an enum).
     """
     TWO = 2
     THREE = 3
@@ -29,3 +51,11 @@ class Rank(IntEnum):
     KING = 13
     ACE = 14
 
+    def __eq__(self, other):
+        if self.__class__ == other.__class__:
+            return super().__eq__(other)
+        else:
+            raise TypeError(TYPE_ERROR_MESSAGE.format(
+                self.__class__,
+                other.__class__))
+        
