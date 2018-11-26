@@ -2,6 +2,7 @@ from enum import Enum, IntEnum, auto,  unique
 
 @unique
 class Suit(Enum):
+    """ Suit values are not orderable. """
     SPADE = auto()
     CLUB = auto()
     HEART = auto()
@@ -9,6 +10,11 @@ class Suit(Enum):
 
 @unique
 class Rank(IntEnum):
+    """
+    Rank values are comparable. Even though it should not matter if
+    used correctly (i.e. only compared to other Ranks), the value of each
+    Rank is set to its semantic value.
+    """
     TWO = 2
     THREE = 3
     FOUR = 4
