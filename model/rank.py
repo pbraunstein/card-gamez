@@ -34,6 +34,13 @@ class Rank(IntEnum):
                 self.__class__,
                 other.__class__))
 
+    # Normally __ne__ automatically delegates to __eq__ making it unnecessary
+    # However, because IntEnum inherits from integer which has a __ne__
+    # definition, __ne__ delegates to the int's __ne__ which doesn't do the
+    # type checking required here. Because of this, I've implemented an __ne__
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
     def __lt__(self, other):
         if self.__class__ == other.__class__:
             return super().__lt__(other)
