@@ -19,8 +19,6 @@ class Suit(Enum):
 
     def __eq__(self, other):
         if self.__class__ == other.__class__:
-            print(self)
-            print(other)
             return super().__eq__(other)
         else:
             raise TypeError(TYPE_ERROR_MESSAGE.format(
@@ -58,4 +56,35 @@ class Rank(IntEnum):
             raise TypeError(TYPE_ERROR_MESSAGE.format(
                 self.__class__,
                 other.__class__))
+
+    def __lt__(self, other):
+        if self.__class__ == other.__class__:
+            return super().__lt__(other)
+        else:
+            raise TypeError(TYPE_ERROR_MESSAGE.format(
+                self.__class__,
+                other.__class__))
+
+    def __le__(self, other):
+        if self.__class__ == other.__class__:
+            return super().__le__(other)
+        else:
+            raise TypeError(TYPE_ERROR_MESSAGE.format(
+                self.__class__,
+                other.__class__))
         
+    def __gt__(self, other):
+        if self.__class__ == other.__class__:
+            return super().__gt__(other)
+        else:
+            raise TypeError(TYPE_ERROR_MESSAGE.format(
+                self.__class__,
+                other.__class__))
+
+    def __ge__(self, other):
+        if self.__class__ == other.__class__:
+            return super().__ge__(other)
+        else:
+            raise TypeError(TYPE_ERROR_MESSAGE.format(
+                self.__class__,
+                other.__class__))
