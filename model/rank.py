@@ -1,6 +1,6 @@
 from enum import IntEnum, unique
 
-from constants import TYPE_ERROR_MESSAGE
+from model.model_constants import TYPE_ERROR_MESSAGE
 
 @unique
 class Rank(IntEnum):
@@ -28,12 +28,8 @@ class Rank(IntEnum):
 
     def __eq__(self, other):
         if self.__class__ == other.__class__:
-            print(self.__class__)
-            print(other.__class__)
             return super().__eq__(other)
         else:
-            print(self.__class__)
-            print(other.__class__)
             raise TypeError(TYPE_ERROR_MESSAGE.format(
                 self.__class__,
                 other.__class__))

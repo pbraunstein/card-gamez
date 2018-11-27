@@ -1,6 +1,6 @@
 from enum import Enum, auto, unique
 
-from constants import TYPE_ERROR_MESSAGE
+from model.model_constants import TYPE_ERROR_MESSAGE
 
 @unique
 class Suit(Enum):

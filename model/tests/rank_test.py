@@ -1,6 +1,6 @@
 import unittest
 
-from rank import Rank
+from model.rank import Rank
 
 class TestRank(unittest.TestCase):
     def test_eq_operator(self):

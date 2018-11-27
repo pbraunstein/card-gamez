@@ -1,6 +1,6 @@
 import unittest
 
-from suit import Suit
+from model.suit import Suit
 
 class TestSuit(unittest.TestCase):
     def test_eq_operator(self):
