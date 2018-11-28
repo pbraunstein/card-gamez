@@ -3,6 +3,12 @@ from model.suit import Suit
 from model.rank import Rank
 
 class Card(object):
+    """
+    A Card consists of a Rank and a Suit. These types are enforced in the
+    constructor.
+
+    Two Cards are considered equal if their ranks are equal.
+    """
     def __init__(self, rank, suit):
         # Enforce typing
         if not isinstance(rank, Rank):
@@ -11,6 +17,21 @@ class Card(object):
             raise TypeError('suit must be of type Suit')
         self._rank = rank
         self._suit = suit
+
+    def __eq__(self, other):
+        return self.rank == other.rank
+
+    def __lt__(self, other):
+        return self.rank < other.rank
+
+    def __gt__(self, other):
+        return self.rank > other.rank
+
+    def __le__(self, other):
+        return self.rank <= other.rank
+
+    def __ge__(self, other):
+        return self.rank >= other.rank
 
     def __str__(self):
         return '{} of {}s'.format(
