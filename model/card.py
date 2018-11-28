@@ -13,7 +13,9 @@ class Card(object):
         self._suit = suit
 
     def __str__(self):
-        return '{} of {}s'.format(self.rank, self.suit)
+        return '{} of {}s'.format(
+                repr(self.rank).title(),
+                repr(self.suit).title())
 
     def __repr__(self):
         return self.__str__()

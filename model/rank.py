@@ -1,6 +1,6 @@
 from enum import IntEnum, unique
 
-from model.model_constants import TYPE_ERROR_MESSAGE
+from model.model_constants import TYPE_ERROR_MESSAGE, THIS_SHOULD_NEVER_HAPPEN
 
 @unique
 class Rank(IntEnum):
@@ -72,3 +72,37 @@ class Rank(IntEnum):
             raise TypeError(TYPE_ERROR_MESSAGE.format(
                 self.__class__,
                 other.__class__))
+
+    def __str__(self):
+        if self == Rank.TWO:
+            return 'two'
+        elif self == Rank.THREE:
+            return 'three'
+        elif self == Rank.FOUR:
+            return 'four'
+        elif self == Rank.FIVE:
+            return 'five'
+        elif self == Rank.SIX:
+            return 'six'
+        elif self == Rank.SEVEN:
+            return 'seven'
+        elif self == Rank.EIGHT:
+            return 'eight'
+        elif self == Rank.NINE:
+            return 'nine'
+        elif self == Rank.TEN:
+            return 'ten'
+        elif self == Rank.JACK:
+            return 'jack'
+        elif self == Rank.QUEEN:
+            return 'queen'
+        elif self == Rank.KING:
+            return 'king'
+        elif self == Rank.ACE:
+            return 'ace'
+        else:
+            raise NotImplementedError(THIS_SHOULD_NEVER_HAPPEN)
+
+    def __repr__(self):
+        return self.__str__()
+
