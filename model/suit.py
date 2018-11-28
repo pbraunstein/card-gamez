@@ -1,6 +1,6 @@
 from enum import Enum, auto, unique
 
-from model.model_constants import TYPE_ERROR_MESSAGE
+from model.model_constants import TYPE_ERROR_MESSAGE, THIS_SHOULD_NEVER_HAPPEN
 
 @unique
 class Suit(Enum):
@@ -22,3 +22,18 @@ class Suit(Enum):
             raise TypeError(TYPE_ERROR_MESSAGE.format(
                 self.__class__,
                 other.__class__))
+
+    def __str__(self):
+        if self == Suit.SPADE:
+            return 'spade'
+        elif self == Suit.CLUB:
+            return 'club'
+        elif self == Suit.HEART:
+            return 'heart'
+        elif self == Suit.DIAMOND:
+            return 'diamond'
+        else:
+            raise NotImplementedError(THIS_SHOULD_NEVER_HAPPEN)
+
+    def __repr__(self):
+        return self.__str__()
