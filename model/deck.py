@@ -6,6 +6,14 @@ from model.rank import Rank
 from model.suit import Suit
 
 class Deck(object):
+    """
+    Represents a standard 52 card deck (no jokers / special cards).
+
+    Each Deck instance may only be dealt a single time otherwise an error gets
+    raised. This is to guard against multiple games pointing to the same Card
+    at the same time. (I'm not convinced this would cause problems,
+    but I'm also not convinced it wouldn't cause problems.
+    """
     def __init__(self):
         self.cards = []
         for rank in Rank:
