@@ -40,3 +40,11 @@ class TestCard(unittest.TestCase):
 
         # ge is not strict
         self.assertTrue(Card(Rank.KING, Suit.SPADE) >= Card(Rank.KING, Suit.DIAMOND))
+
+    def test_wrong_rank_class_raises_erorr(self):
+        with self.assertRaises(TypeError):
+            _ = Card(2, Suit.SPADE)
+
+    def test_wrong_suit_class_raises_error(self):
+        with self.assertRaises(TypeError):
+            _ = Card(Rank.ACE, 1)
