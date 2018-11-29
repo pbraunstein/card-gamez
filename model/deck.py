@@ -1,6 +1,7 @@
 from random import shuffle
 
 from model.card import Card
+from model.model_constants import DoubleDealtDeckError
 from model.rank import Rank
 from model.suit import Suit
 
@@ -21,4 +22,10 @@ class Deck(object):
         self._dealt = value
 
     def deal(self):
-        pass
+        if self.dealt:
+            raise DoubleDealtDeckError('This deck has already been dealt')
+        else:
+            self.dealt = True
+
+        shuffle(self.cards)
+        return self.cards[::2], self.cards[1::2]
