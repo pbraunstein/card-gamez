@@ -26,39 +26,27 @@ class War(object):
             b_card = self.b_player.popleft()
             a_on_top = (randint(0, 1) == 0)
             if a_card > b_card:
-                if debug_print:
-                    print("A WINS")
                 if len(self.pile) > 0:
-                    self.a_player.extend(self.pile)
-                    self.pile.clear()
+                    self.append_pile(self.a_player)
                 if a_on_top:
                     self.append_cards(self.a_player, b_card, a_card)
                 else:
                     self.append_cards(self.a_player, a_card, b_card)
             elif b_card > a_card:
-                if debug_print:
-                    print("B WINS")
                 if len(self.pile) > 0:
-                    self.b_player.extend(self.pile)
-                    self.pile.clear()
+                    self.append_pile(self.b_player)
                 if a_on_top:
                     self.append_cards(self.b_player, b_card, a_card)
                 else:
                     self.append_cards(self.b_player, a_card, b_card)
             else:
-                if debug_print:
-                    print("TIE")
                 if a_on_top:
                     self.append_cards(self.pile, b_card, a_card)
                 else:
                     self.append_cards(self.pile, a_card, b_card)
             self.counter += 1
             if debug_print:
-                print('TURN: {}'.format(self.counter))
-                print('a-card: {} b-card: {}'.format(a_card, b_card))
-                print('a-length: {} b-length: {}'.format(len(self.a_player),
-                      len(self.b_player)))
-                print()
+                self.summarize_turn(a_card, b_card)
 
         return self.counter
 
@@ -68,3 +56,21 @@ class War(object):
     def append_cards(self, hand, card_1, card_2):
         hand.append(card_1)
         hand.append(card_2)
+
+    def append_pile(self, hand):
+        hand.extend(self.pile)
+        self.pile.clear()
+
+    def summarize_turn(self, a_card, b_card):
+        if a_card > b_card:
+            print('A WINS')
+        elif b_card > a_card:
+            print('B WINS')
+        else:
+            print('TIE')
+
+        print('TURN: {}'.format(self.counter))
+        print('a-card: {} b-card: {}'.format(a_card, b_card))
+        print('a-length: {} b-length: {}'.format(len(self.a_player),
+              len(self.b_player)))
+        print()
