@@ -5,6 +5,14 @@ from time import sleep
 from model.deck import Deck
 
 class War(object):
+    """
+    Simulates a game of war. The order in which the players' cards stack in
+    each hand is nondeterministic.
+
+    The game is over when either of the players runs out of cards. This is the
+    case even if there are left over cards (e.g. the last card a player puts
+    down results in a tie).
+    """
     def __init__(self, deck=None):
         if deck is None:
             self.deck = Deck()
@@ -25,6 +33,7 @@ class War(object):
             a_card = self.a_player.popleft()
             b_card = self.b_player.popleft()
             a_on_top = (randint(0, 1) == 0)
+
             if a_card > b_card:
                 if len(self.pile) > 0:
                     self.append_pile(self.a_player)
@@ -47,7 +56,6 @@ class War(object):
             self.counter += 1
             if debug_print:
                 self.summarize_turn(a_card, b_card)
-
         return self.counter
 
     def game_over(self):
@@ -58,6 +66,10 @@ class War(object):
         hand.append(card_2)
 
     def append_pile(self, hand):
+        """
+        Adds all the cards in the pile to the hand passed in (preserving order)
+        Also clears the pile.
+        """
         hand.extend(self.pile)
         self.pile.clear()
 
