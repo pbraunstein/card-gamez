@@ -32,11 +32,9 @@ class War(object):
                     self.a_player.extend(self.pile)
                     self.pile.clear()
                 if a_on_top:
-                    self.a_player.append(b_card)
-                    self.a_player.append(a_card)
+                    self.append_cards(self.a_player, b_card, a_card)
                 else:
-                    self.a_player.append(a_card)
-                    self.a_player.append(b_card)
+                    self.append_cards(self.a_player, a_card, b_card)
             elif b_card > a_card:
                 if debug_print:
                     print("B WINS")
@@ -44,20 +42,16 @@ class War(object):
                     self.b_player.extend(self.pile)
                     self.pile.clear()
                 if a_on_top:
-                    self.b_player.append(b_card)
-                    self.b_player.append(a_card)
+                    self.append_cards(self.b_player, b_card, a_card)
                 else:
-                    self.b_player.append(a_card)
-                    self.b_player.append(b_card)
+                    self.append_cards(self.b_player, a_card, b_card)
             else:
                 if debug_print:
                     print("TIE")
                 if a_on_top:
-                    self.pile.append(b_card)
-                    self.pile.append(a_card)
+                    self.append_cards(self.pile, b_card, a_card)
                 else:
-                    self.pile.append(a_card)
-                    self.pile.append(b_card)
+                    self.append_cards(self.pile, a_card, b_card)
             self.counter += 1
             if debug_print:
                 print('TURN: {}'.format(self.counter))
@@ -70,3 +64,7 @@ class War(object):
 
     def game_over(self):
         return len(self.a_player) == 0 or len(self.b_player) == 0
+
+    def append_cards(self, hand, card_1, card_2):
+        hand.append(card_1)
+        hand.append(card_2)
