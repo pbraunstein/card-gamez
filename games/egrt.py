@@ -34,8 +34,13 @@ class Egrt(object):
         # and chances_remaining should be reset to None.
         self.chances_remaining = None
 
+        self.counter = 0
+
     def simulate_game(self, debug_print=False):
         while not self.game_over():
+            self.counter += 1
+            print(self.counter)
+            print('pile {} a_player {} b_player {}'.format(len(self.pile), len(self.a_player), len(self.b_player)))
             if self.a_turn:
                 new_card = self.a_player.popleft()
             else:
@@ -47,8 +52,10 @@ class Egrt(object):
 
             # Push prev_card to pile, top_card to prev_card, and new_card
             # to top_card
-            self.pile.append(self.prev_card)
-            self.prev_card = self.top_card
+            if self.prev_card is not None:
+                self.pile.append(self.prev_card)
+            if self.top_card is not None:
+                self.prev_card = self.top_card
             self.top_card = new_card
 
             if slap_happened:
@@ -60,19 +67,34 @@ class Egrt(object):
                     self.a_turn = False
                 continue
 
-        # now we know it's not a slap
+            if self.top_card.is_face_card():
+                self.set_chances_remaining()
+                self.a_turn = not self.a_turn
+                continue
 
-        # put newly flipped card on self.top_card, puth self.top_card to prev_card and prev_card to pile (not in that order though)
+            # Whichever player is up just ran out of turns
+            if self.chances_remaining is not None and self.chances_remaining == 0:
+                # If a just lost the turn, add the cards to b
+                if self.a_turn:
+                    self.add_cards_to_hand(self.b_player)
+                else:  # if b just lost the turn, add cards to a
+                    self.add_cards_to_hand(self.a_player)
+                self.a_turn = not self.a_turn
+            # Whichever player has another chance to get a face card
+            elif self.chances_remaining is not None and self.chances_remaining > 0:
+                self.chances_remaining -= 1
+            else:
+                self.a_turn = not self.a_turn
 
-        # check if face card, if so reset chances_remaining, flip the turn and continue the loop
+        if len(self.a_player) == 0 and len(self.b_player) == 0:
+            victor = 'T'
+        elif len(self.b_player) == 0:
+            victor = 'A'
+        else:
+            victor = 'B'
 
-        # now we know it's not a face card and not a slap
+        return victor, self.counter
 
-        # if chances_remaining is not None and chances_remaining == 0, end of turn, move cards over and flip turn, continue loop
-
-        # if chances_remaining is not None and chances_remaining > 0, continue loop, TURN DOES NOT FLIP
-
-        # if chances_remaining is None continue loop flip turn
 
     def game_over(self):
         return len(self.a_player) == 0 or len(self.b_player) == 0
@@ -108,7 +130,11 @@ class Egrt(object):
         hand.extend(self.pile)
         hand.append(self.prev_card)
         hand.append(self.top_card)
+
         self.pile.clear()
+        self.prev_card = None
+        self.top_card = None
+        self.chances_remaining = None
 
     def set_chances_remaining(self):
         """
