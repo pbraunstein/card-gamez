@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import patch
 
 from games.egrt import Egrt
 from model.card import Card
@@ -26,3 +27,21 @@ class TestEgrt(unittest.TestCase):
     def test_wrong_deck_class_raises_error(self):
         with self.assertRaises(TypeError):
             _ = Egrt(0.5, 12)
+
+    @patch('games.egrt.random')
+    def test_random_less_than_a_slap_probability(self, random_mock):
+        random_mock.return_value = 0.25
+        a = Egrt(0.26)
+        self.assertTrue(a.a_won_slap())
+
+    @patch('games.egrt.random')
+    def test_random_same_as_a_slap_probability(self, random_mock):
+        random_mock.return_value = 0.26
+        a = Egrt(0.26)
+        self.assertFalse(a.a_won_slap())
+
+    @patch('games.egrt.random')
+    def test_random_greater_than_a_slap_probability(self, random_mock):
+        random_mock.return_value = 0.27
+        a = Egrt(0.26)
+        self.assertFalse(a.a_won_slap())

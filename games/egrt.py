@@ -7,6 +7,7 @@ class Egrt(object):
     def __init__(self, a_slap_probability, deck=None):
         if a_slap_probability < 0 or a_slap_probability >= 1:
             raise ValueError('a_slap_probability must be between 0 and 1')
+        self.a_slap_probability = a_slap_probability
 
         if deck is None:
             self.deck = Deck()
@@ -35,3 +36,6 @@ class Egrt(object):
 
     def game_over(self):
         return len(self.a_player) == 0 or len(self.b_player) == 0
+
+    def a_won_slap(self):
+        return True if random() < self.a_slap_probability else False
