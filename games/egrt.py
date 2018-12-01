@@ -21,8 +21,10 @@ class Egrt(object):
         self.top_card = None
         self.prev_card = None
         self.pile = deque()
-        self.a_player = deque()
-        self.b_player = deque()
+
+        hand_1, hand_2 = self.deck.deal()
+        self.a_player = deque(hand_1)
+        self.b_player = deque(hand_2)
 
         self.a_turn = True  # the A player always goes first
 
@@ -34,10 +36,29 @@ class Egrt(object):
 
     def simulate_game(self, debug_print=False):
         while not self.game_over():
-            break
-        # flip card from whoever is up
+            if self.a_turn:
+                new_card = self.a_player.popleft()
+            else:
+                new_card = self.b_player.popleft()
 
-        # check if it's a slap. if so evaluate slap, declare winner, give the winner the next turn, reset chances_remaining, and continue the loop
+            # Need to check if a slap happened before pushing new_card to
+            # top_card so that it is possible to check for sandwiches.
+            slap_happened = self.is_slap(new_card)
+
+            # Push prev_card to pile, top_card to prev_card, and new_card
+            # to top_card
+            self.pile.append(self.prev_card)
+            self.prev_card = self.top_card
+            self.top_card = new_card
+
+            if slap_happened:
+                if self.a_won_slap():
+                    self.add_cards_to_hand(self.a_player)
+                    self.a_turn = True
+                else:
+                    self.add_cards_to_hand(self.b_player)
+                    self.a_turn = False
+                continue
 
         # now we know it's not a slap
 
@@ -78,6 +99,16 @@ class Egrt(object):
 
     def a_won_slap(self):
         return True if random() < self.a_slap_probability else False
+
+    def add_cards_to_hand(self, hand):
+        if self.top_card is None or self.prev_card is None:
+            raise ValueError(
+                    'Must be at least two cards to call add_cards_to_hand')
+
+        hand.extend(self.pile)
+        hand.append(self.prev_card)
+        hand.append(self.top_card)
+        self.pile.clear()
 
     def set_chances_remaining(self):
         """

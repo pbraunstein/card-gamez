@@ -1,3 +1,4 @@
+from collections import deque
 import unittest
 from unittest.mock import patch
 
@@ -127,3 +128,20 @@ class TestEgrt(unittest.TestCase):
         game.prev_card = Card(Rank.QUEEN, Suit.DIAMOND)
         game.top_card = Card(Rank.SIX, Suit.DIAMOND)
         self.assertFalse(game.is_slap(Card(Rank.KING, Suit.SPADE)))
+
+    def test_add_card_to_hand_no_top_or_prev(self):
+        game = Egrt(0.5)
+        with self.assertRaises(ValueError):
+            game.add_cards_to_hand(deque())
+
+    def test_add_card_to_hand_no_top_card(self):
+        game = Egrt(0.5)
+        game.prev_card = Card(Rank.THREE, Suit.CLUB)
+        with self.assertRaises(ValueError):
+            game.add_cards_to_hand(deque())
+
+    def test_add_card_to_hand_no_prev_card(self):
+        game = Egrt(0.5)
+        game.top_card = Card(Rank.THREE, Suit.CLUB)
+        with self.assertRaises(ValueError):
+            game.add_cards_to_hand(deque())
