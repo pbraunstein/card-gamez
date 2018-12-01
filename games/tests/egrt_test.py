@@ -134,14 +134,60 @@ class TestEgrt(unittest.TestCase):
         with self.assertRaises(ValueError):
             game.add_cards_to_hand(deque())
 
-    def test_add_card_to_hand_no_top_card(self):
+    def test_add_cards_to_hand_no_top_card(self):
         game = Egrt(0.5)
         game.prev_card = Card(Rank.THREE, Suit.CLUB)
         with self.assertRaises(ValueError):
             game.add_cards_to_hand(deque())
 
-    def test_add_card_to_hand_no_prev_card(self):
+    def test_add_cards_to_hand_no_prev_card(self):
         game = Egrt(0.5)
         game.top_card = Card(Rank.THREE, Suit.CLUB)
         with self.assertRaises(ValueError):
             game.add_cards_to_hand(deque())
+
+    def test_add_cards_to_hand_no_pile(self):
+        game = Egrt(0.5)
+        card_1 = Card(Rank.FOUR, Suit.HEART)
+        card_2 = Card(Rank.JACK, Suit.CLUB)
+
+        game.prev_card = card_1
+        game.top_card = card_2
+
+        actual_hand = deque()
+        game.add_cards_to_hand(actual_hand)
+        self.assertEqual(list(actual_hand), [card_1, card_2])
+
+    def test_add_cards_to_hand_single_card_in_pile(self):
+        game = Egrt(0.5)
+        card_1 = Card(Rank.FOUR, Suit.HEART)
+        card_2 = Card(Rank.SIX, Suit.SPADE)
+        card_3 = Card(Rank.QUEEN, Suit.CLUB)
+
+        game.pile.append(card_1)
+        game.prev_card = card_2
+        game.top_card = card_3
+
+        actual_hand = deque()
+        game.add_cards_to_hand(actual_hand)
+        self.assertEqual(list(actual_hand), [card_1, card_2, card_3])
+        
+    def test_add_cards_to_hand_multiple_cards_in_pile(self):
+        game = Egrt(0.5)
+        card_1 = Card(Rank.FOUR, Suit.HEART)
+        card_2 = Card(Rank.SIX, Suit.SPADE)
+        card_3 = Card(Rank.QUEEN, Suit.CLUB)
+        card_4 = Card(Rank.TEN, Suit.DIAMOND)
+        card_5 = Card(Rank.EIGHT, Suit.CLUB)
+        card_6 = Card(Rank.TWO, Suit.CLUB)
+        card_7 = Card(Rank.NINE, Suit.SPADE)
+
+        game.pile.extend([card_1, card_2, card_3, card_4, card_5])
+        game.prev_card = card_6
+        game.top_card = card_7
+
+        actual_hand = deque()
+        game.add_cards_to_hand(actual_hand)
+        self.assertEqual(list(actual_hand),
+                [card_1, card_2, card_3, card_4, card_5, card_6, card_7])
+
