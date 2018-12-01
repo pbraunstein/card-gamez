@@ -1,6 +1,6 @@
 from argparse import ArgumentParser
 
-from games.war.war import War
+from games.war import War
 
 def main():
     parser = ArgumentParser(description='play a game of war')

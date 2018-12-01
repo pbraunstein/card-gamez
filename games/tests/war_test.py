@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
 
-from games.war.war import War
+from games.war import War
 from model.card import Card
 from model.deck import Deck
 from model.rank import Rank
