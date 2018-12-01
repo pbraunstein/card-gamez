@@ -4,7 +4,10 @@ from random import random
 from model.deck import Deck
 
 class Egrt(object):
-    def __init__(self, deck=None):
+    def __init__(self, a_slap_probability, deck=None):
+        if a_slap_probability < 0 or a_slap_probability >= 1:
+            raise ValueError('a_slap_probability must be between 0 and 1')
+
         if deck is None:
             self.deck = Deck()
         else:
@@ -21,6 +24,11 @@ class Egrt(object):
 
         self.a_turn = True  # the A player always goes first
 
+        # When chances_remaining is None, a player is not responding to
+        # the other player's face card. When it becomes 0, the
+        # player responding to the face card has lost the hand
+        # and chances_remaining should be reset to None.
+        self.chances_remaining = None
 
     def simulate_game(self, debug_print=False):
         pass

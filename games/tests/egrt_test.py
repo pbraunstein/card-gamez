@@ -11,6 +11,18 @@ class TestEgrt(unittest.TestCase):
         super().setUp()
         self.mock_deck = Deck()
 
+    def test_a_slap_probability_negative(self):
+        with self.assertRaises(ValueError):
+            _ = Egrt(-0.1)
+
+    def test_a_slap_probability_is_one(self):
+        with self.assertRaises(ValueError):
+            _ = Egrt(1.0)
+
+    def test_a_slap_probability_greater_than_one(self):
+        with self.assertRaises(ValueError):
+            _ = Egrt(1.25)
+
     def test_wrong_deck_class_raises_error(self):
         with self.assertRaises(TypeError):
-            _ = Egrt(12)
+            _ = Egrt(0.5, 12)
