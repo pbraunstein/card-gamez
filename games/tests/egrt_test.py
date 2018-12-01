@@ -157,6 +157,10 @@ class TestEgrt(unittest.TestCase):
         actual_hand = deque()
         game.add_cards_to_hand(actual_hand)
         self.assertEqual(list(actual_hand), [card_1, card_2])
+        self.assertEqual(len(game.pile), 0)
+        self.assertIsNone(game.prev_card)
+        self.assertIsNone(game.top_card)
+        self.assertIsNone(game.chances_remaining)
 
     def test_add_cards_to_hand_single_card_in_pile(self):
         game = Egrt(0.5)
@@ -172,6 +176,9 @@ class TestEgrt(unittest.TestCase):
         game.add_cards_to_hand(actual_hand)
         self.assertEqual(list(actual_hand), [card_1, card_2, card_3])
         self.assertEqual(len(game.pile), 0)
+        self.assertIsNone(game.prev_card)
+        self.assertIsNone(game.top_card)
+        self.assertIsNone(game.chances_remaining)
         
     def test_add_cards_to_hand_multiple_cards_in_pile(self):
         game = Egrt(0.5)
@@ -192,7 +199,7 @@ class TestEgrt(unittest.TestCase):
         self.assertEqual(list(actual_hand),
                 [card_1, card_2, card_3, card_4, card_5, card_6, card_7])
         self.assertEqual(len(game.pile), 0)
-
-    #TODO update tests for add_cards_to_hand to set the things to None it needs to
-
+        self.assertIsNone(game.prev_card)
+        self.assertIsNone(game.top_card)
+        self.assertIsNone(game.chances_remaining)
 
