@@ -2,6 +2,7 @@ from collections import deque
 from random import random
 
 from model.deck import Deck
+from model.rank import Rank
 
 class Egrt(object):
     def __init__(self, a_slap_probability, deck=None):
@@ -39,3 +40,31 @@ class Egrt(object):
 
     def a_won_slap(self):
         return True if random() < self.a_slap_probability else False
+
+    def set_chances_remaining(self):
+        """
+        When a face card is played, the number of chances remaining needs to
+        be set depending on the value of the face card.
+
+        This method assumes that the face card that has already been played
+        from which the value is to be set has already been assigned to
+        self.top_card.
+
+        This method throws an error if the top_card is not a face card because
+        there are no chances remaining when the card is not a face card.
+        """
+        if not self.top_card.is_face_card():
+            raise ValueError(
+                    'top_card must be a face card to set chances_remaining')
+
+        if self.top_card.rank == Rank.ACE:
+            self.chances_remaining = 4
+        elif self.top_card.rank == Rank.KING:
+            self.chances_remaining = 3
+        elif self.top_card.rank == Rank.QUEEN:
+            self.chances_remaining = 2
+        elif self.top_card.rank == Rank.JACK:
+            self.chances_remaining = 1
+        else:
+            raise NotImplementedError('THIS SHOULD NEVER HAPPEN')
+

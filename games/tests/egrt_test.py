@@ -45,3 +45,33 @@ class TestEgrt(unittest.TestCase):
         random_mock.return_value = 0.27
         a = Egrt(0.26)
         self.assertFalse(a.a_won_slap())
+
+    def test_set_chances_remaining_non_face_card(self):
+        game = Egrt(0.5)
+        game.top_card = Card(Rank.TEN, Suit.HEART)
+        with self.assertRaises(ValueError):
+            game.set_chances_remaining()
+
+    def test_set_chances_remaining_ace(self):
+        game = Egrt(0.5)
+        game.top_card = Card(Rank.ACE, Suit.HEART)
+        game.set_chances_remaining()
+        self.assertEqual(game.chances_remaining, 4)
+
+    def test_set_chances_remaining_ace(self):
+        game = Egrt(0.5)
+        game.top_card = Card(Rank.KING, Suit.CLUB)
+        game.set_chances_remaining()
+        self.assertEqual(game.chances_remaining, 3)
+        
+    def test_set_chances_remaining_ace(self):
+        game = Egrt(0.5)
+        game.top_card = Card(Rank.QUEEN, Suit.DIAMOND)
+        game.set_chances_remaining()
+        self.assertEqual(game.chances_remaining, 2)
+
+    def test_set_chances_remaining_ace(self):
+        game = Egrt(0.5)
+        game.top_card = Card(Rank.JACK, Suit.SPADE)
+        game.set_chances_remaining()
+        self.assertEqual(game.chances_remaining, 1)
