@@ -32,8 +32,26 @@ class Egrt(object):
         # and chances_remaining should be reset to None.
         self.chances_remaining = None
 
-    def simulate_game(self, debug_print=False):
-        pass
+def simulate_game(self, debug_print=False):
+    while not self.game_over():
+        break
+        # flip card from whoever is up
+
+        # check if it's a slap. if so evaluate slap, declare winner, give the winner the next turn, reset chances_remaining, and continue the loop
+
+        # now we know it's not a slap
+
+        # put newly flipped card on self.top_card, puth self.top_card to prev_card and prev_card to pile (not in that order though)
+
+        # check if face card, if so reset chances_remaining, flip the turn and continue the loop
+
+        # now we know it's not a face card and not a slap
+
+        # if chances_remaining is not None and chances_remaining == 0, end of turn, move cards over and flip turn, continue loop
+
+        # if chances_remaining is not None and chances_remaining > 0, continue loop, TURN DOES NOT FLIP
+
+        # if chances_remaining is None continue loop flip turn
 
     def game_over(self):
         return len(self.a_player) == 0 or len(self.b_player) == 0
