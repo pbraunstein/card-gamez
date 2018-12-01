@@ -48,3 +48,9 @@ class Card(object):
     @property
     def suit(self):
         return self._suit
+
+    def is_face_card(self):
+        return (self.rank == Rank.ACE or
+                self.rank == Rank.KING or
+                self.rank == Rank.QUEEN or
+                self.rank == Rank.JACK)

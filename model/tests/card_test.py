@@ -48,3 +48,19 @@ class TestCard(unittest.TestCase):
     def test_wrong_suit_class_raises_error(self):
         with self.assertRaises(TypeError):
             _ = Card(Rank.ACE, 1)
+
+    def test_is_face_card(self):
+        self.assertTrue(Card(Rank.ACE, Suit.SPADE).is_face_card())
+        self.assertTrue(Card(Rank.KING, Suit.SPADE).is_face_card())
+        self.assertTrue(Card(Rank.QUEEN, Suit.SPADE).is_face_card())
+        self.assertTrue(Card(Rank.JACK, Suit.SPADE).is_face_card())
+
+        self.assertFalse(Card(Rank.TEN, Suit.SPADE).is_face_card())
+        self.assertFalse(Card(Rank.NINE, Suit.SPADE).is_face_card())
+        self.assertFalse(Card(Rank.EIGHT, Suit.SPADE).is_face_card())
+        self.assertFalse(Card(Rank.SEVEN, Suit.SPADE).is_face_card())
+        self.assertFalse(Card(Rank.SIX, Suit.SPADE).is_face_card())
+        self.assertFalse(Card(Rank.FIVE, Suit.SPADE).is_face_card())
+        self.assertFalse(Card(Rank.FOUR, Suit.SPADE).is_face_card())
+        self.assertFalse(Card(Rank.THREE, Suit.SPADE).is_face_card())
+        self.assertFalse(Card(Rank.TWO, Suit.SPADE).is_face_card())
