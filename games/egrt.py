@@ -32,9 +32,9 @@ class Egrt(object):
         # and chances_remaining should be reset to None.
         self.chances_remaining = None
 
-def simulate_game(self, debug_print=False):
-    while not self.game_over():
-        break
+    def simulate_game(self, debug_print=False):
+        while not self.game_over():
+            break
         # flip card from whoever is up
 
         # check if it's a slap. if so evaluate slap, declare winner, give the winner the next turn, reset chances_remaining, and continue the loop
@@ -55,6 +55,26 @@ def simulate_game(self, debug_print=False):
 
     def game_over(self):
         return len(self.a_player) == 0 or len(self.b_player) == 0
+
+    def is_slap(self, new_card):
+        # Can't be a slap if it is the first card in the pile
+        if self.top_card is None:
+            return False
+
+        # check classic slap
+        if self.top_card == new_card:
+            return True
+
+        # check Queen / King slap
+        if (self.top_card.rank == Rank.QUEEN and new_card.rank == Rank.KING or
+                self.top_card.rank == Rank.KING and new_card.rank == Rank.QUEEN):
+            return True
+
+        # check sandwich slap
+        if self.prev_card is not None and self.prev_card == new_card:
+            return True
+        else:
+            return False
 
     def a_won_slap(self):
         return True if random() < self.a_slap_probability else False

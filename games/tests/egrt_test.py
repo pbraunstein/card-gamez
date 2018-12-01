@@ -31,20 +31,20 @@ class TestEgrt(unittest.TestCase):
     @patch('games.egrt.random')
     def test_random_less_than_a_slap_probability(self, random_mock):
         random_mock.return_value = 0.25
-        a = Egrt(0.26)
-        self.assertTrue(a.a_won_slap())
+        game = Egrt(0.26)
+        self.assertTrue(game.a_won_slap())
 
     @patch('games.egrt.random')
     def test_random_same_as_a_slap_probability(self, random_mock):
         random_mock.return_value = 0.26
-        a = Egrt(0.26)
-        self.assertFalse(a.a_won_slap())
+        game = Egrt(0.26)
+        self.assertFalse(game.a_won_slap())
 
     @patch('games.egrt.random')
     def test_random_greater_than_a_slap_probability(self, random_mock):
         random_mock.return_value = 0.27
-        a = Egrt(0.26)
-        self.assertFalse(a.a_won_slap())
+        game = Egrt(0.26)
+        self.assertFalse(game.a_won_slap())
 
     def test_set_chances_remaining_non_face_card(self):
         game = Egrt(0.5)
@@ -75,3 +75,55 @@ class TestEgrt(unittest.TestCase):
         game.top_card = Card(Rank.JACK, Suit.SPADE)
         game.set_chances_remaining()
         self.assertEqual(game.chances_remaining, 1)
+
+    def test_is_slap_empty_pile(self):
+        game = Egrt(0.5)
+        self.assertFalse(game.is_slap(Card(Rank.FIVE, Suit.CLUB)))
+
+    def test_is_slap_single_card_in_pile(self):
+        game = Egrt(0.5)
+        game.top_card = Card(Rank.JACK, Suit.DIAMOND)
+        self.assertTrue(game.is_slap(Card(Rank.JACK, Suit.HEART)))
+
+    def test_is_slap_not_a_slap(self):
+        game = Egrt(0.5)
+        game.prev_card = Card(Rank.SEVEN, Suit.CLUB)
+        game.top_card = Card(Rank.SIX, Suit.DIAMOND)
+        self.assertFalse(game.is_slap(Card(Rank.FIVE, Suit.HEART)))
+
+    def test_is_slap_yes_is_slap(self):
+        game = Egrt(0.5)
+        game.prev_card = Card(Rank.ACE, Suit.CLUB)
+        game.top_card = Card(Rank.QUEEN, Suit.DIAMOND)
+        self.assertTrue(game.is_slap(Card(Rank.ACE, Suit.HEART)))
+
+    def test_is_slap_sandwich_slap(self):
+        game = Egrt(0.5)
+        game.prev_card = Card(Rank.SEVEN, Suit.CLUB)
+        game.top_card = Card(Rank.SIX, Suit.DIAMOND)
+        self.assertTrue(game.is_slap(Card(Rank.SIX, Suit.HEART)))
+
+    def test_is_slap_queen_king_slap(self):
+        game = Egrt(0.5)
+        game.prev_card = Card(Rank.SIX, Suit.DIAMOND)
+        game.top_card = Card(Rank.QUEEN, Suit.DIAMOND)
+        self.assertTrue(game.is_slap(Card(Rank.KING, Suit.SPADE)))
+
+    def test_is_slap_king_queen_slap(self):
+        game = Egrt(0.5)
+        game.prev_card = Card(Rank.SIX, Suit.DIAMOND)
+        game.top_card = Card(Rank.KING, Suit.DIAMOND)
+        self.assertTrue(game.is_slap(Card(Rank.QUEEN, Suit.SPADE)))
+
+
+    def test_is_slap_queen_king_sandwich(self):
+        game = Egrt(0.5)
+        game.prev_card = Card(Rank.KING, Suit.DIAMOND)
+        game.top_card = Card(Rank.SIX, Suit.DIAMOND)
+        self.assertFalse(game.is_slap(Card(Rank.QUEEN, Suit.SPADE)))
+
+    def test_is_slap_king_queen_sandwich(self):
+        game = Egrt(0.5)
+        game.prev_card = Card(Rank.QUEEN, Suit.DIAMOND)
+        game.top_card = Card(Rank.SIX, Suit.DIAMOND)
+        self.assertFalse(game.is_slap(Card(Rank.KING, Suit.SPADE)))
