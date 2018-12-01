@@ -1,8 +1,11 @@
 from collections import deque
 from random import random
+from time import sleep
 
 from model.deck import Deck
 from model.rank import Rank
+
+SLEEP_DELAY = 2
 
 class Egrt(object):
     def __init__(self, a_slap_probability, deck=None):
@@ -39,12 +42,20 @@ class Egrt(object):
     def simulate_game(self, debug_print=False):
         while not self.game_over():
             self.counter += 1
-            print(self.counter)
-            print('pile {} a_player {} b_player {}'.format(len(self.pile), len(self.a_player), len(self.b_player)))
+            if debug_print:
+                sleep(SLEEP_DELAY)
+                print()
+                print('turn: {}'.format(self.counter))
+                print('A: {}, B: {}, pile: {}'.format(
+                    len(self.a_player), len(self.b_player), self.pile_size()))
             if self.a_turn:
                 new_card = self.a_player.popleft()
+                if debug_print:
+                    print('A plays a {}'.format(new_card))
             else:
                 new_card = self.b_player.popleft()
+                if debug_print:
+                    print('B plays a {}'.format(new_card))
 
             # Need to check if a slap happened before pushing new_card to
             # top_card so that it is possible to check for sandwiches.
@@ -60,9 +71,15 @@ class Egrt(object):
 
             if slap_happened:
                 if self.a_won_slap():
+                    if debug_print:
+                        sleep(SLEEP_DELAY)
+                        print('A wins slap')
                     self.add_cards_to_hand(self.a_player)
                     self.a_turn = True
                 else:
+                    if debug_print:
+                        sleep(SLEEP_DELAY)
+                        print('B wins slap')
                     self.add_cards_to_hand(self.b_player)
                     self.a_turn = False
                 continue
@@ -72,18 +89,25 @@ class Egrt(object):
                 self.a_turn = not self.a_turn
                 continue
 
+            if self.chances_remaining is None:
+                self.a_turn = not self.a_turn
+                continue
+
+            self.chances_remaining -= 1
+
             # Whichever player is up just ran out of turns
-            if self.chances_remaining is not None and self.chances_remaining == 0:
+            if self.chances_remaining == 0:
                 # If a just lost the turn, add the cards to b
                 if self.a_turn:
                     self.add_cards_to_hand(self.b_player)
+                    if debug_print:
+                        sleep(SLEEP_DELAY)
+                        print('B wins hand')
                 else:  # if b just lost the turn, add cards to a
                     self.add_cards_to_hand(self.a_player)
-                self.a_turn = not self.a_turn
-            # Whichever player has another chance to get a face card
-            elif self.chances_remaining is not None and self.chances_remaining > 0:
-                self.chances_remaining -= 1
-            else:
+                    if debug_print:
+                        sleep(SLEEP_DELAY)
+                        print('A wins hand')
                 self.a_turn = not self.a_turn
 
         if len(self.a_player) == 0 and len(self.b_player) == 0:
@@ -162,4 +186,12 @@ class Egrt(object):
             self.chances_remaining = 1
         else:
             raise NotImplementedError('THIS SHOULD NEVER HAPPEN')
+
+    def pile_size(self):
+        size = 0
+        if self.top_card is not None:
+            size += 1
+        if self.prev_card is not None:
+            size += 1
+        return size + len(self.pile)
 
