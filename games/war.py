@@ -1,6 +1,5 @@
 from collections import deque
 from random import randint
-from time import sleep
 
 from model.deck import Deck
 
