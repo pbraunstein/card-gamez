@@ -51,11 +51,11 @@ class Egrt(object):
             if self.a_turn:
                 new_card = self.a_player.popleft()
                 if debug_print:
-                    print('A plays a {}'.format(new_card))
+                    print('A plays {}'.format(new_card))
             else:
                 new_card = self.b_player.popleft()
                 if debug_print:
-                    print('B plays a {}'.format(new_card))
+                    print('B plays {}'.format(new_card))
 
             # Need to check if a slap happened before pushing new_card to
             # top_card so that it is possible to check for sandwiches.
