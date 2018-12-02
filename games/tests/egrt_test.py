@@ -1,6 +1,6 @@
 from collections import deque
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 
 from games.egrt import Egrt
 from model.card import Card
@@ -9,10 +9,6 @@ from model.rank import Rank
 from model.suit import Suit
 
 class TestEgrt(unittest.TestCase):
-    def setUp(self):
-        super().setUp()
-        self.mock_deck = Deck()
-
     def test_a_slap_probability_negative(self):
         with self.assertRaises(ValueError):
             _ = Egrt(-0.1)
@@ -203,3 +199,66 @@ class TestEgrt(unittest.TestCase):
         self.assertIsNone(game.top_card)
         self.assertIsNone(game.chances_remaining)
 
+    def test_simulate_game_empty_deck(self):
+        mock_deck = Deck()
+        mock_deck.deal = MagicMock(return_value=([], []))
+        game = Egrt(0.5, deck=mock_deck)
+        winner, turns = game.simulate_game()
+        self.assertEqual(winner, 'T')
+        self.assertEqual(turns, 0)
+
+    def test_simulate_game_ace_wins(self):
+        mock_deck = Deck()
+        mock_deck.deal = MagicMock(return_value=(
+            [
+                Card(Rank.ACE, Suit.CLUB),
+                Card(Rank.KING, Suit.CLUB)
+            ],
+            [
+                Card(Rank.TWO, Suit.CLUB),
+                Card(Rank.SEVEN, Suit.DIAMOND),
+                Card(Rank.FOUR, Suit.CLUB),
+                Card(Rank.NINE, Suit.SPADE)
+            ]
+        ))
+        game = Egrt(0.5, deck=mock_deck)
+        winner, turns = game.simulate_game()
+        self.assertEqual(winner, 'A')
+        self.assertEqual(turns, 5)
+
+    def test_simulate_game_king_and_jack_win(self):
+        mock_deck = Deck()
+        mock_deck.deal = MagicMock(return_value=(
+            [
+                Card(Rank.KING, Suit.CLUB),
+                Card(Rank.JACK, Suit.CLUB)
+            ],
+            [
+                Card(Rank.TWO, Suit.CLUB),
+                Card(Rank.SEVEN, Suit.DIAMOND),
+                Card(Rank.FOUR, Suit.CLUB),
+                Card(Rank.NINE, Suit.SPADE)
+            ]
+        ))
+        game = Egrt(0.5, deck=mock_deck)
+        winner, turns = game.simulate_game()
+        self.assertEqual(winner, 'A')
+        self.assertEqual(turns, 6)
+
+    def test_simulate_queen_wins(self):
+        mock_deck = Deck()
+        mock_deck.deal = MagicMock(return_value=(
+            [
+                Card(Rank.SIX, Suit.DIAMOND),
+                Card(Rank.SEVEN, Suit.CLUB),
+                Card(Rank.EIGHT, Suit.SPADE)
+            ],
+            [
+                Card(Rank.QUEEN, Suit.HEART),
+                Card(Rank.TWO, Suit.SPADE)
+            ]
+        ))
+        game = Egrt(0.5, deck=mock_deck)
+        winner, turns = game.simulate_game()
+        self.assertEqual(winner, 'B')
+        self.assertEqual(turns, 4)
