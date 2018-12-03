@@ -5,7 +5,8 @@
 
 ### Answers
 1. 607 +/- 499. This answer war calculated by simulating 10,000 games of war.
-    Note that there is a high degree of variance.
+    Note that there is a high degree of variance. Simulating more games of war
+    (1,000,000) did not affect the stdev or the mean at 609 +/- 499.
 
 
 ### Commands

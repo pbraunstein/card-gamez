@@ -4,7 +4,7 @@ import war_main
 
 def main():
     results = []
-    for x in xrange(10000):
+    for x in range(1000000):
         results.append(war_main.main())
     print(round(mean(results)), '+/-', round(stdev(results)))
 
