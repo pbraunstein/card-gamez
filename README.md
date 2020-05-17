@@ -12,7 +12,10 @@
 
 ### Commands
 To simulate 10,000 games of War run:
-python simulate_many_games_of_war.py
+`python simulate_many_games_of_war.py`
+
+To simulate an Egyptian Rat Tail Game game with debug print statements to watch the game run:
+`python egrt_main.py --a_slap_probability 0.5 --debug_print`
 
 To run unit tests, run the following command from the base directory:
-python -m unittest discover -p "*test.py"
+`python -m unittest discover -p "*test.py"`
