@@ -7,6 +7,7 @@
 1. 607 +/- 499. This answer war calculated by simulating 10,000 games of war.
     Note that there is a high degree of variance. Simulating more games of war
     (1,000,000) did not affect the stdev or the mean at 609 +/- 499.
+2. A player's skill has a very large effect on the outcome; however skill isn't always enough to win. Even when player A has a 0 percent chance at winning slaps, they still win 0.1345% of games.
 
 
 ### Commands
