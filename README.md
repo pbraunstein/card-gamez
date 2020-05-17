@@ -1,7 +1,7 @@
 ### Questions
 1. On average, how many turns is a game of War?
 2. How much does a player's skill in slapping influence the outcome
-    of Egyptian Rat Screw?
+    of Egyptian Rat Tail?
 
 ### Answers
 1. 607 +/- 499. This answer war calculated by simulating 10,000 games of war.
